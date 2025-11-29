@@ -1,0 +1,182 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.intentblocker"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+11-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:5:5-6:53
+11-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:5:22-74
+12
+13    <permission
+13-->[androidx.core:core:1.12.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+14        android:name="com.example.intentblocker.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+14-->[androidx.core:core:1.12.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+15        android:protectionLevel="signature" />
+15-->[androidx.core:core:1.12.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+16
+17    <uses-permission android:name="com.example.intentblocker.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+17-->[androidx.core:core:1.12.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+17-->[androidx.core:core:1.12.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+18
+19    <application
+19-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:8:5-46:19
+20        android:allowBackup="true"
+20-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:9:9-35
+21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+21-->[androidx.core:core:1.12.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/fa491052a0c4e52c4bc12c333827ee1c/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+22        android:debuggable="true"
+23        android:extractNativeLibs="false"
+24        android:icon="@mipmap/ic_launcher"
+24-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:10:9-43
+25        android:label="@string/app_name"
+25-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:11:9-41
+26        android:roundIcon="@mipmap/ic_launcher_round"
+26-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:12:9-54
+27        android:supportsRtl="true"
+27-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:13:9-35
+28        android:testOnly="true"
+29        android:theme="@android:style/Theme.Material.Light.NoActionBar" >
+29-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:14:9-72
+30        <activity
+30-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:16:9-25:20
+31            android:name="com.example.intentblocker.MainActivity"
+31-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:17:13-41
+32            android:exported="true"
+32-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:18:13-36
+33            android:label="@string/app_name"
+33-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:19:13-45
+34            android:theme="@android:style/Theme.Material.Light.NoActionBar" >
+34-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:20:13-76
+35            <intent-filter>
+35-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:21:13-24:29
+36                <action android:name="android.intent.action.MAIN" />
+36-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:22:17-69
+36-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:22:25-66
+37
+38                <category android:name="android.intent.category.LAUNCHER" />
+38-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:23:17-77
+38-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:23:27-74
+39            </intent-filter>
+40        </activity>
+41        <activity
+41-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:27:9-32:49
+42            android:name="com.example.intentblocker.ui.FrictionActivity"
+42-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:28:13-48
+43            android:excludeFromRecents="true"
+43-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:32:13-46
+44            android:exported="false"
+44-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:29:13-37
+45            android:launchMode="singleTop"
+45-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:31:13-43
+46            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+46-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:30:13-72
+47
+48        <service
+48-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:34:9-44:19
+49            android:name="com.example.intentblocker.service.IntentBlockerService"
+49-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:35:13-57
+50            android:exported="true"
+50-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:37:13-36
+51            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+51-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:36:13-79
+52            <intent-filter>
+52-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:38:13-40:29
+53                <action android:name="android.accessibilityservice.AccessibilityService" />
+53-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:39:17-92
+53-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:39:25-89
+54            </intent-filter>
+55
+56            <meta-data
+56-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:41:13-43:72
+57                android:name="android.accessibilityservice"
+57-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:42:17-60
+58                android:resource="@xml/accessibility_service_config" />
+58-->/Users/alex/Documents/git/perso/IntentBlocker/app/src/main/AndroidManifest.xml:43:17-69
+59        </service>
+60
+61        <activity
+61-->[androidx.compose.ui:ui-test-manifest:1.5.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/9b749664e80c8a9cc9949500f651e5af/transformed/jetified-ui-test-manifest-1.5.0/AndroidManifest.xml:23:9-25:39
+62            android:name="androidx.activity.ComponentActivity"
+62-->[androidx.compose.ui:ui-test-manifest:1.5.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/9b749664e80c8a9cc9949500f651e5af/transformed/jetified-ui-test-manifest-1.5.0/AndroidManifest.xml:24:13-63
+63            android:exported="true" />
+63-->[androidx.compose.ui:ui-test-manifest:1.5.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/9b749664e80c8a9cc9949500f651e5af/transformed/jetified-ui-test-manifest-1.5.0/AndroidManifest.xml:25:13-36
+64        <activity
+64-->[androidx.compose.ui:ui-tooling-android:1.5.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/c89d94fdf4c1b60295d5fdd89a46b39b/transformed/jetified-ui-tooling-release/AndroidManifest.xml:23:9-25:39
+65            android:name="androidx.compose.ui.tooling.PreviewActivity"
+65-->[androidx.compose.ui:ui-tooling-android:1.5.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/c89d94fdf4c1b60295d5fdd89a46b39b/transformed/jetified-ui-tooling-release/AndroidManifest.xml:24:13-71
+66            android:exported="true" />
+66-->[androidx.compose.ui:ui-tooling-android:1.5.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/c89d94fdf4c1b60295d5fdd89a46b39b/transformed/jetified-ui-tooling-release/AndroidManifest.xml:25:13-36
+67
+68        <provider
+68-->[androidx.emoji2:emoji2:1.4.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/2fc8f12f4cd9c22bfc72e3302f01753b/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
+69            android:name="androidx.startup.InitializationProvider"
+69-->[androidx.emoji2:emoji2:1.4.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/2fc8f12f4cd9c22bfc72e3302f01753b/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:25:13-67
+70            android:authorities="com.example.intentblocker.androidx-startup"
+70-->[androidx.emoji2:emoji2:1.4.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/2fc8f12f4cd9c22bfc72e3302f01753b/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:26:13-68
+71            android:exported="false" >
+71-->[androidx.emoji2:emoji2:1.4.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/2fc8f12f4cd9c22bfc72e3302f01753b/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:27:13-37
+72            <meta-data
+72-->[androidx.emoji2:emoji2:1.4.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/2fc8f12f4cd9c22bfc72e3302f01753b/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:29:13-31:52
+73                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+73-->[androidx.emoji2:emoji2:1.4.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/2fc8f12f4cd9c22bfc72e3302f01753b/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:30:17-75
+74                android:value="androidx.startup" />
+74-->[androidx.emoji2:emoji2:1.4.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/2fc8f12f4cd9c22bfc72e3302f01753b/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:31:17-49
+75            <meta-data
+75-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/bef930d6e36706b6cccdbb588c3fac67/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+76                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+76-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/bef930d6e36706b6cccdbb588c3fac67/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+77                android:value="androidx.startup" />
+77-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/bef930d6e36706b6cccdbb588c3fac67/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+78            <meta-data
+78-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+79                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+79-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+80                android:value="androidx.startup" />
+80-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+81        </provider>
+82
+83        <receiver
+83-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+84            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+84-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+85            android:directBootAware="false"
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+86            android:enabled="true"
+86-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+87            android:exported="true"
+87-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+88            android:permission="android.permission.DUMP" >
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+89            <intent-filter>
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+90                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+91            </intent-filter>
+92            <intent-filter>
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+93                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+94            </intent-filter>
+95            <intent-filter>
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+96                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+97            </intent-filter>
+98            <intent-filter>
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+99                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+99-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+99-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/alex/.gradle/caches/9.0-milestone-1/transforms/f9953b3adf2f840cbb4137f28a684aab/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+100            </intent-filter>
+101        </receiver>
+102    </application>
+103
+104</manifest>

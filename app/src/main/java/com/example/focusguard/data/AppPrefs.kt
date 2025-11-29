@@ -9,6 +9,8 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -21,6 +23,7 @@ class AppPrefs(private val context: Context) {
                 androidx.datastore.preferences.core.longPreferencesKey("allow_duration")
         val IS_SERVICE_ENABLED =
                 androidx.datastore.preferences.core.booleanPreferencesKey("is_service_enabled")
+        val ALLOWED_PACKAGES = stringPreferencesKey("allowed_packages")
         const val DEFAULT_SENTENCE = "I am conscious of my choice"
         const val DEFAULT_DURATION = 60000L
     }
@@ -63,11 +66,26 @@ class AppPrefs(private val context: Context) {
     }
 
     val isServiceEnabled: Flow<Boolean> =
-            context.dataStore.data.map { preferences ->
-                preferences[IS_SERVICE_ENABLED] ?: true
-            }
+            context.dataStore.data.map { preferences -> preferences[IS_SERVICE_ENABLED] ?: true }
 
     suspend fun setServiceEnabled(enabled: Boolean) {
         context.dataStore.edit { preferences -> preferences[IS_SERVICE_ENABLED] = enabled }
+    }
+
+    val allowedPackages: Flow<Map<String, Long>> =
+            context.dataStore.data.map { preferences ->
+                val json = preferences[ALLOWED_PACKAGES] ?: "{}"
+                try {
+                    Json.decodeFromString<Map<String, Long>>(json)
+                } catch (e: Exception) {
+                    emptyMap()
+                }
+            }
+
+    suspend fun setAllowedPackages(packages: Map<String, Long>) {
+        context.dataStore.edit { preferences ->
+            val json = Json.encodeToString<Map<String, Long>>(packages)
+            preferences[ALLOWED_PACKAGES] = json
+        }
     }
 }

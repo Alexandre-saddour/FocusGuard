@@ -8,15 +8,19 @@ import android.os.SystemClock
 import com.example.focusguard.domain.FocusRepository
 import com.example.focusguard.domain.model.AppInfo
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class FocusRepositoryImpl
 @Inject
 constructor(private val context: Context, private val appPrefs: AppPrefs) : FocusRepository {
 
     private val packageManager = context.packageManager
-
-    private val allowedPackages = mutableMapOf<String, Long>()
+    private val repositoryScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     override val blockedPackages: Flow<Set<String>> = appPrefs.blockedPackages
     override val frictionSentence: Flow<String> = appPrefs.frictionSentence
@@ -68,15 +72,31 @@ constructor(private val context: Context, private val appPrefs: AppPrefs) : Focu
     }
 
     override fun isPackageAllowed(packageName: String): Boolean {
-        val expiry = allowedPackages[packageName] ?: return false
-        if (SystemClock.elapsedRealtime() > expiry) {
-            allowedPackages.remove(packageName)
-            return false
-        }
-        return true
+        // Use runBlocking for synchronous access - this is called from service
+        val allowed =
+                kotlinx.coroutines.runBlocking {
+                    val allowedPackages = appPrefs.allowedPackages.first()
+                    val startTime = allowedPackages[packageName] ?: return@runBlocking false
+                    val currentAllowDuration = appPrefs.allowDuration.first()
+                    val elapsed = SystemClock.elapsedRealtime() - startTime
+
+                    if (elapsed >= currentAllowDuration) {
+                        // Remove expired entry
+                        val updated = allowedPackages.toMutableMap().apply { remove(packageName) }
+                        appPrefs.setAllowedPackages(updated)
+                        false
+                    } else {
+                        true
+                    }
+                }
+        return allowed
     }
 
     override fun temporarilyAllowPackage(packageName: String, durationMs: Long) {
-        allowedPackages[packageName] = SystemClock.elapsedRealtime() + durationMs
+        repositoryScope.launch {
+            val currentAllowed = appPrefs.allowedPackages.first().toMutableMap()
+            currentAllowed[packageName] = SystemClock.elapsedRealtime()
+            appPrefs.setAllowedPackages(currentAllowed)
+        }
     }
 }

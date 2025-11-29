@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">FocusGuard</string>
+    <string name="service_active_title">FocusGuard Active</string>
+    <string name="service_paused_title">FocusGuard Paused</string>
     <string name="friction_pause">Pause.</string>
     <string name="friction_confirmation">Are you sure you want to open this app?</string>
     <string name="friction_prompt">Type the following to proceed:</string>

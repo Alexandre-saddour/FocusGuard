@@ -46,9 +46,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.example.focusguard.ui.AppInfo
+import com.example.focusguard.domain.model.AppInfo
 import com.example.focusguard.ui.MainViewModel
 import com.example.focusguard.ui.theme.FocusGuardTheme
+import androidx.core.net.toUri
 
 class MainActivity : ComponentActivity() {
         private val viewModel: MainViewModel by viewModels()
@@ -282,9 +283,7 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                                                 val intent =
                                                         Intent(
                                                                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                                                android.net.Uri.parse(
-                                                                        "package:${context.packageName}"
-                                                                )
+                                                            "package:${context.packageName}".toUri()
                                                         )
                                                 context.startActivity(intent)
                                         },

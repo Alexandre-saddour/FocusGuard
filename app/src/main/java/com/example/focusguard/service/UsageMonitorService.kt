@@ -12,8 +12,11 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
+import com.example.focusguard.FocusGuardApp
 import com.example.focusguard.R
-import com.example.focusguard.data.AppPrefs
+import com.example.focusguard.domain.usecase.CheckAppUsageUseCase
+import com.example.focusguard.domain.usecase.GetBlockedAppsUseCase
+import com.example.focusguard.domain.usecase.GetGlobalServiceStateUseCase
 import com.example.focusguard.ui.FrictionActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +27,12 @@ import kotlinx.coroutines.launch
 class UsageMonitorService : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.Main + Job())
-    private lateinit var appPrefs: AppPrefs
+
+    // Use Cases
+    private lateinit var checkAppUsageUseCase: CheckAppUsageUseCase
+    private lateinit var getGlobalServiceStateUseCase: GetGlobalServiceStateUseCase
+    private lateinit var getBlockedAppsUseCase: GetBlockedAppsUseCase
+
     private var blockedPackages: Set<String> = emptySet()
     private val handler = Handler(Looper.getMainLooper())
     private var isMonitoring = false
@@ -49,10 +57,15 @@ class UsageMonitorService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        appPrefs = AppPrefs(applicationContext)
+        val repository = (application as FocusGuardApp).repository
+        checkAppUsageUseCase = CheckAppUsageUseCase(repository)
+        getGlobalServiceStateUseCase = GetGlobalServiceStateUseCase(repository)
+        getBlockedAppsUseCase = GetBlockedAppsUseCase(repository)
 
-        serviceScope.launch { appPrefs.blockedPackages.collectLatest { blockedPackages = it } }
-        serviceScope.launch { appPrefs.isServiceEnabled.collectLatest { isServiceEnabled = it } }
+        serviceScope.launch { getBlockedAppsUseCase().collectLatest { blockedPackages = it } }
+        serviceScope.launch {
+            getGlobalServiceStateUseCase().collectLatest { isServiceEnabled = it }
+        }
 
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification())
@@ -95,7 +108,7 @@ class UsageMonitorService : Service() {
         if (foregroundPackage != null &&
                         foregroundPackage != packageName &&
                         blockedPackages.contains(foregroundPackage) &&
-                        !BlockManager.isPackageAllowed(foregroundPackage)
+                        !checkAppUsageUseCase.isPackageAllowed(foregroundPackage)
         ) {
 
             launchFrictionActivity(foregroundPackage)

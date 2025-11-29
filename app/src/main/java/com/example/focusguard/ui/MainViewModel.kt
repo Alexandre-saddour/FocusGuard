@@ -105,4 +105,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updateAllowDuration(duration: Long) {
         viewModelScope.launch { appPrefs.setAllowDuration(duration) }
     }
+
+    val isServiceEnabled =
+            appPrefs.isServiceEnabled.stateIn(
+                    viewModelScope,
+                    SharingStarted.WhileSubscribed(5000),
+                    true
+            )
+
+    fun toggleServiceEnabled(enabled: Boolean) {
+        viewModelScope.launch { appPrefs.setServiceEnabled(enabled) }
+    }
 }

@@ -45,11 +45,14 @@ class UsageMonitorService : Service() {
         private const val POLLING_INTERVAL_MS = 1000L // 1 second
     }
 
+    private var isServiceEnabled = true
+
     override fun onCreate() {
         super.onCreate()
         appPrefs = AppPrefs(applicationContext)
 
         serviceScope.launch { appPrefs.blockedPackages.collectLatest { blockedPackages = it } }
+        serviceScope.launch { appPrefs.isServiceEnabled.collectLatest { isServiceEnabled = it } }
 
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification())
@@ -72,6 +75,8 @@ class UsageMonitorService : Service() {
     }
 
     private fun checkForegroundApp() {
+        if (!isServiceEnabled) return
+
         val usageStatsManager = getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
         val currentTime = System.currentTimeMillis()
 
@@ -116,7 +121,9 @@ class UsageMonitorService : Service() {
                                     getString(R.string.focus_guard_service),
                                     NotificationManager.IMPORTANCE_LOW
                             )
-                            .apply { description = getString(R.string.monitoring_app_usage_description) }
+                            .apply {
+                                description = getString(R.string.monitoring_app_usage_description)
+                            }
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }

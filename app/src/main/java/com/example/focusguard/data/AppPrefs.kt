@@ -19,6 +19,8 @@ class AppPrefs(private val context: Context) {
         val FRICTION_SENTENCE = stringPreferencesKey("friction_sentence")
         val ALLOW_DURATION =
                 androidx.datastore.preferences.core.longPreferencesKey("allow_duration")
+        val IS_SERVICE_ENABLED =
+                androidx.datastore.preferences.core.booleanPreferencesKey("is_service_enabled")
         const val DEFAULT_SENTENCE = "I am conscious of my choice"
         const val DEFAULT_DURATION = 60000L
     }
@@ -58,5 +60,14 @@ class AppPrefs(private val context: Context) {
 
     suspend fun setAllowDuration(duration: Long) {
         context.dataStore.edit { preferences -> preferences[ALLOW_DURATION] = duration }
+    }
+
+    val isServiceEnabled: Flow<Boolean> =
+            context.dataStore.data.map { preferences ->
+                preferences[IS_SERVICE_ENABLED] ?: true
+            }
+
+    suspend fun setServiceEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences -> preferences[IS_SERVICE_ENABLED] = enabled }
     }
 }

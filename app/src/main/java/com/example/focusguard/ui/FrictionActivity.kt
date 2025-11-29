@@ -1,4 +1,4 @@
-package com.example.intentblocker.ui
+package com.example.focusguard.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,9 +14,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.intentblocker.R
-import com.example.intentblocker.data.AppPrefs
-import com.example.intentblocker.ui.theme.IntentBlockerTheme
+import com.example.focusguard.R
+import com.example.focusguard.data.AppPrefs
+import com.example.focusguard.ui.theme.FocusGuardTheme
 import kotlinx.coroutines.launch
 
 class FrictionActivity : ComponentActivity() {
@@ -32,13 +32,15 @@ class FrictionActivity : ComponentActivity() {
         val targetPackage = intent.getStringExtra(EXTRA_TARGET_PACKAGE)
 
         setContent {
-            IntentBlockerTheme(darkTheme = true) { // Force dark theme for focus
+            FocusGuardTheme(darkTheme = true) { // Force dark theme for focus
                 FrictionScreen(
                         appPrefs = appPrefs,
                         onUnlock = { allowDuration ->
                             if (targetPackage != null) {
-                                com.example.intentblocker.service.BlockManager
-                                        .temporarilyAllowPackage(targetPackage, allowDuration)
+                                com.example.focusguard.service.BlockManager.temporarilyAllowPackage(
+                                        targetPackage,
+                                        allowDuration
+                                )
                                 val launchIntent =
                                         packageManager.getLaunchIntentForPackage(targetPackage)
                                 if (launchIntent != null) {
@@ -161,7 +163,12 @@ fun FrictionScreen(appPrefs: AppPrefs, onUnlock: (Long) -> Unit) {
                                     disabledContentColor =
                                             MaterialTheme.colorScheme.onSurfaceVariant
                             )
-            ) { Text(text = stringResource(id = R.string.friction_proceed_button), style = MaterialTheme.typography.titleMedium) }
+            ) {
+                Text(
+                        text = stringResource(id = R.string.friction_proceed_button),
+                        style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
     }
 }

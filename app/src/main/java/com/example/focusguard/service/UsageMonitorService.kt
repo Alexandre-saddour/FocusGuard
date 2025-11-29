@@ -1,4 +1,4 @@
-package com.example.intentblocker.service
+package com.example.focusguard.service
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,8 +12,8 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
-import com.example.intentblocker.data.AppPrefs
-import com.example.intentblocker.ui.FrictionActivity
+import com.example.focusguard.data.AppPrefs
+import com.example.focusguard.ui.FrictionActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -40,7 +40,7 @@ class UsageMonitorService : Service() {
 
     companion object {
         private const val NOTIFICATION_ID = 1
-        private const val CHANNEL_ID = "intent_blocker_service"
+        private const val CHANNEL_ID = "focus_guard_service"
         private const val POLLING_INTERVAL_MS = 1000L // 1 second
     }
 
@@ -112,7 +112,7 @@ class UsageMonitorService : Service() {
             val channel =
                     NotificationChannel(
                                     CHANNEL_ID,
-                                    "Intent Blocker Service",
+                                    "FocusGuard Service",
                                     NotificationManager.IMPORTANCE_LOW
                             )
                             .apply { description = "Monitors app usage to block distracting apps" }
@@ -123,7 +123,7 @@ class UsageMonitorService : Service() {
 
     private fun createNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Intent Blocker")
+                .setContentTitle("FocusGuard")
                 .setContentText("Monitoring app usage")
                 .setSmallIcon(android.R.drawable.ic_menu_view)
                 .setPriority(NotificationCompat.PRIORITY_LOW)

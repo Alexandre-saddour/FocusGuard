@@ -1,4 +1,4 @@
-package com.example.intentblocker.service
+package com.example.focusguard.service
 
 import android.os.SystemClock
 

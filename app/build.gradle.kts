@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.intentblocker"
+    namespace = "com.example.focusguard"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.example.intentblocker"
+        applicationId = "com.example.focusguard"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1

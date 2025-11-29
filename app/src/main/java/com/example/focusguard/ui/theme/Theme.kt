@@ -1,4 +1,4 @@
-package com.example.intentblocker.ui.theme
+package com.example.focusguard.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -37,7 +37,7 @@ private val LightColorScheme =
         )
 
 @Composable
-fun IntentBlockerTheme(
+fun FocusGuardTheme(
         darkTheme: Boolean = isSystemInDarkTheme(),
         // Dynamic color is available on Android 12+
         dynamicColor: Boolean = false, // Disable dynamic color to enforce our "Focus" theme

@@ -1,4 +1,4 @@
-package com.example.intentblocker.data
+package com.example.focusguard.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -17,20 +17,21 @@ class AppPrefs(private val context: Context) {
     companion object {
         val BLOCKED_PACKAGES = stringSetPreferencesKey("blocked_packages")
         val FRICTION_SENTENCE = stringPreferencesKey("friction_sentence")
-        val ALLOW_DURATION = androidx.datastore.preferences.core.longPreferencesKey("allow_duration")
+        val ALLOW_DURATION =
+                androidx.datastore.preferences.core.longPreferencesKey("allow_duration")
         const val DEFAULT_SENTENCE = "I am conscious of my choice"
         const val DEFAULT_DURATION = 60000L
     }
 
-    val blockedPackages: Flow<Set<String>> = context.dataStore.data
-        .map { preferences ->
-            preferences[BLOCKED_PACKAGES] ?: emptySet()
-        }
+    val blockedPackages: Flow<Set<String>> =
+            context.dataStore.data.map { preferences ->
+                preferences[BLOCKED_PACKAGES] ?: emptySet()
+            }
 
-    val frictionSentence: Flow<String> = context.dataStore.data
-        .map { preferences ->
-            preferences[FRICTION_SENTENCE] ?: DEFAULT_SENTENCE
-        }
+    val frictionSentence: Flow<String> =
+            context.dataStore.data.map { preferences ->
+                preferences[FRICTION_SENTENCE] ?: DEFAULT_SENTENCE
+            }
 
     suspend fun addBlockedPackage(packageName: String) {
         context.dataStore.edit { preferences ->
@@ -47,19 +48,15 @@ class AppPrefs(private val context: Context) {
     }
 
     suspend fun setFrictionSentence(sentence: String) {
-        context.dataStore.edit { preferences ->
-            preferences[FRICTION_SENTENCE] = sentence
-        }
+        context.dataStore.edit { preferences -> preferences[FRICTION_SENTENCE] = sentence }
     }
 
-    val allowDuration: Flow<Long> = context.dataStore.data
-        .map { preferences ->
-            preferences[ALLOW_DURATION] ?: DEFAULT_DURATION
-        }
+    val allowDuration: Flow<Long> =
+            context.dataStore.data.map { preferences ->
+                preferences[ALLOW_DURATION] ?: DEFAULT_DURATION
+            }
 
     suspend fun setAllowDuration(duration: Long) {
-        context.dataStore.edit { preferences ->
-            preferences[ALLOW_DURATION] = duration
-        }
+        context.dataStore.edit { preferences -> preferences[ALLOW_DURATION] = duration }
     }
 }

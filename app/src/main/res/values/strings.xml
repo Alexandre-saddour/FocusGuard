@@ -16,4 +16,12 @@
     <string name="save_sentence_button">Save Sentence</string>
     <string name="unlock_duration_label">Unlock Duration (seconds)</string>
     <string name="save_duration_button">Save Duration</string>
+    <string name="permissions_required">Permissions Required</string>
+    <string name="grant_permissions_below">Grant required permissions below</string>
+    <string name="grant_usage_access">Grant Usage Access</string>
+    <string name="grant_overlay_permission">Grant Overlay Permission</string>
+    <string name="focus_guard_service">FocusGuard Service</string>
+    <string name="monitoring_app_usage_description">Monitors app usage to block distracting apps</string>
+    <string name="focus_guard">FocusGuard</string>
+    <string name="monitoring_app_usage">Monitoring app usage</string>
 </resources>

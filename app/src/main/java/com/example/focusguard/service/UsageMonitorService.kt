@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
+import com.example.focusguard.R
 import com.example.focusguard.data.AppPrefs
 import com.example.focusguard.ui.FrictionActivity
 import kotlinx.coroutines.CoroutineScope
@@ -102,7 +103,7 @@ class UsageMonitorService : Service() {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                    putExtra("target_package", packageName)
+                    putExtra(FrictionActivity.EXTRA_TARGET_PACKAGE, packageName)
                 }
         startActivity(intent)
     }
@@ -112,10 +113,10 @@ class UsageMonitorService : Service() {
             val channel =
                     NotificationChannel(
                                     CHANNEL_ID,
-                                    "FocusGuard Service",
+                                    getString(R.string.focus_guard_service),
                                     NotificationManager.IMPORTANCE_LOW
                             )
-                            .apply { description = "Monitors app usage to block distracting apps" }
+                            .apply { description = getString(R.string.monitoring_app_usage_description) }
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
@@ -123,8 +124,8 @@ class UsageMonitorService : Service() {
 
     private fun createNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("FocusGuard")
-                .setContentText("Monitoring app usage")
+                .setContentTitle(getString(R.string.focus_guard))
+                .setContentText(getString(R.string.monitoring_app_usage))
                 .setSmallIcon(android.R.drawable.ic_menu_view)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build()

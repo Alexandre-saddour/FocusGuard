@@ -178,7 +178,7 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                            text = if (isFullyEnabled) "Service Active" else "Permissions Required",
+                            text = if (isFullyEnabled) stringResource(id = R.string.service_active) else stringResource(id = R.string.permissions_required),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color =
@@ -187,7 +187,7 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                     )
                     if (!isFullyEnabled) {
                         Text(
-                                text = "Grant required permissions below",
+                                text = stringResource(id = R.string.grant_permissions_below),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onErrorContainer
                         )
@@ -208,7 +208,7 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                                         containerColor = MaterialTheme.colorScheme.error,
                                         contentColor = MaterialTheme.colorScheme.onError
                                 )
-                ) { Text("Grant Usage Access") }
+                ) { Text(stringResource(id = R.string.grant_usage_access)) }
             }
 
             if (!hasOverlayPermission) {
@@ -228,7 +228,7 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                                         containerColor = MaterialTheme.colorScheme.error,
                                         contentColor = MaterialTheme.colorScheme.onError
                                 )
-                ) { Text("Grant Overlay Permission") }
+                ) { Text(stringResource(id = R.string.grant_overlay_permission)) }
             }
         }
     }

@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -69,7 +70,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 CenterAlignedTopAppBar(
                         title = {
                             Text(
-                                    "Intent Blocker",
+                                    stringResource(id = R.string.app_name),
                                     style =
                                             MaterialTheme.typography.titleLarge.copy(
                                                     fontWeight = FontWeight.Bold
@@ -101,7 +102,7 @@ fun MainScreen(viewModel: MainViewModel) {
 
             item {
                 Text(
-                        text = "Blocked Apps",
+                        text = stringResource(id = R.string.blocked_apps),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(vertical = 8.dp)
@@ -147,7 +148,7 @@ fun ServiceStatusCard(isEnabled: Boolean, context: Context) {
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                        text = if (isEnabled) "Service Active" else "Service Inactive",
+                        text = if (isEnabled) stringResource(id = R.string.service_active) else stringResource(id = R.string.service_inactive),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color =
@@ -156,7 +157,7 @@ fun ServiceStatusCard(isEnabled: Boolean, context: Context) {
                 )
                 if (!isEnabled) {
                     Text(
-                            text = "Tap to enable accessibility",
+                            text = stringResource(id = R.string.enable_accessibility),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onErrorContainer
                     )
@@ -173,7 +174,7 @@ fun ServiceStatusCard(isEnabled: Boolean, context: Context) {
                                         containerColor = MaterialTheme.colorScheme.error,
                                         contentColor = MaterialTheme.colorScheme.onError
                                 )
-                ) { Text("Enable") }
+                ) { Text(stringResource(id = R.string.enable_button)) }
             }
         }
     }
@@ -203,12 +204,12 @@ fun ConfigurationSection(
                     verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                        text = "Configuration",
+                        text = stringResource(id = R.string.configuration),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                 )
                 IconButton(onClick = { expanded = !expanded }) {
-                    Icon(Icons.Default.Settings, contentDescription = "Settings")
+                    Icon(Icons.Default.Settings, contentDescription = stringResource(id = R.string.settings))
                 }
             }
 
@@ -220,7 +221,7 @@ fun ConfigurationSection(
                 OutlinedTextField(
                         value = tempSentence,
                         onValueChange = { tempSentence = it },
-                        label = { Text("Friction Sentence") },
+                        label = { Text(stringResource(id = R.string.friction_sentence_label)) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true
                 )
@@ -228,7 +229,7 @@ fun ConfigurationSection(
                     TextButton(
                             onClick = { onUpdateSentence(tempSentence) },
                             modifier = Modifier.align(Alignment.End)
-                    ) { Text("Save Sentence") }
+                    ) { Text(stringResource(id = R.string.save_sentence_button)) }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -243,7 +244,7 @@ fun ConfigurationSection(
                         onValueChange = {
                             if (it.all { char -> char.isDigit() }) tempDuration = it
                         },
-                        label = { Text("Unlock Duration (seconds)") },
+                        label = { Text(stringResource(id = R.string.unlock_duration_label)) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true
                 )
@@ -253,7 +254,7 @@ fun ConfigurationSection(
                                 tempDuration.toLongOrNull()?.let { onUpdateDuration(it * 1000) }
                             },
                             modifier = Modifier.align(Alignment.End)
-                    ) { Text("Save Duration") }
+                    ) { Text(stringResource(id = R.string.save_duration_button)) }
                 }
             }
         }

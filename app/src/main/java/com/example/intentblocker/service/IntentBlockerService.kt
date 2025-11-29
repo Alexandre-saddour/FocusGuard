@@ -47,7 +47,7 @@ class IntentBlockerService : AccessibilityService() {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                    putExtra("target_package", packageName)
+                    putExtra(FrictionActivity.EXTRA_TARGET_PACKAGE, packageName)
                 }
                 startActivity(intent)
             }

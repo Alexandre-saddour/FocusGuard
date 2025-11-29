@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Intent Blocker</string>
+    <string name="friction_pause">Pause.</string>
+    <string name="friction_confirmation">Are you sure you want to open this app?</string>
+    <string name="friction_prompt">Type the following to proceed:</string>
+    <string name="friction_input_label">Type here</string>
+    <string name="friction_proceed_button">Proceed</string>
+    <string name="blocked_apps">Blocked Apps</string>
+    <string name="service_active">Service Active</string>
+    <string name="service_inactive">Service Inactive</string>
+    <string name="enable_accessibility">Tap to enable accessibility</string>
+    <string name="enable_button">Enable</string>
+    <string name="configuration">Configuration</string>
+    <string name="settings">Settings</string>
+    <string name="friction_sentence_label">Friction Sentence</string>
+    <string name="save_sentence_button">Save Sentence</string>
+    <string name="unlock_duration_label">Unlock Duration (seconds)</string>
+    <string name="save_duration_button">Save Duration</string>
 </resources>

@@ -3,7 +3,6 @@ package com.example.intentblocker.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,19 +10,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.intentblocker.R
 import com.example.intentblocker.data.AppPrefs
 import com.example.intentblocker.ui.theme.IntentBlockerTheme
 import kotlinx.coroutines.launch
 
 class FrictionActivity : ComponentActivity() {
+
+    companion object {
+        const val EXTRA_TARGET_PACKAGE = "target_package"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val appPrefs = AppPrefs(applicationContext)
-        val targetPackage = intent.getStringExtra("target_package")
+        val targetPackage = intent.getStringExtra(EXTRA_TARGET_PACKAGE)
 
         setContent {
             IntentBlockerTheme(darkTheme = true) { // Force dark theme for focus
@@ -66,7 +72,7 @@ fun FrictionScreen(appPrefs: AppPrefs, onUnlock: (Long) -> Unit) {
                 verticalArrangement = Arrangement.Center
         ) {
             Text(
-                    text = "Pause.",
+                    text = stringResource(id = R.string.friction_pause),
                     style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
@@ -75,7 +81,7 @@ fun FrictionScreen(appPrefs: AppPrefs, onUnlock: (Long) -> Unit) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                    text = "Are you sure you want to open this app?",
+                    text = stringResource(id = R.string.friction_confirmation),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                     textAlign = TextAlign.Center
@@ -98,7 +104,7 @@ fun FrictionScreen(appPrefs: AppPrefs, onUnlock: (Long) -> Unit) {
                         horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                            text = "Type the following to proceed:",
+                            text = stringResource(id = R.string.friction_prompt),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -119,7 +125,7 @@ fun FrictionScreen(appPrefs: AppPrefs, onUnlock: (Long) -> Unit) {
             OutlinedTextField(
                     value = inputText,
                     onValueChange = { inputText = it },
-                    label = { Text("Type here") },
+                    label = { Text(stringResource(id = R.string.friction_input_label)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors =
@@ -155,7 +161,7 @@ fun FrictionScreen(appPrefs: AppPrefs, onUnlock: (Long) -> Unit) {
                                     disabledContentColor =
                                             MaterialTheme.colorScheme.onSurfaceVariant
                             )
-            ) { Text(text = "Proceed", style = MaterialTheme.typography.titleMedium) }
+            ) { Text(text = stringResource(id = R.string.friction_proceed_button), style = MaterialTheme.typography.titleMedium) }
         }
     }
 }

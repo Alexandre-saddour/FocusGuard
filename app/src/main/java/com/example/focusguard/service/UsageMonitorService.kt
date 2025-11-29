@@ -12,26 +12,27 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
-import com.example.focusguard.FocusGuardApp
 import com.example.focusguard.R
 import com.example.focusguard.domain.usecase.CheckAppUsageUseCase
 import com.example.focusguard.domain.usecase.GetBlockedAppsUseCase
 import com.example.focusguard.domain.usecase.GetGlobalServiceStateUseCase
 import com.example.focusguard.ui.FrictionActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class UsageMonitorService : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.Main + Job())
 
-    // Use Cases
-    private lateinit var checkAppUsageUseCase: CheckAppUsageUseCase
-    private lateinit var getGlobalServiceStateUseCase: GetGlobalServiceStateUseCase
-    private lateinit var getBlockedAppsUseCase: GetBlockedAppsUseCase
+    @Inject lateinit var checkAppUsageUseCase: CheckAppUsageUseCase
+    @Inject lateinit var getGlobalServiceStateUseCase: GetGlobalServiceStateUseCase
+    @Inject lateinit var getBlockedAppsUseCase: GetBlockedAppsUseCase
 
     private var blockedPackages: Set<String> = emptySet()
     private val handler = Handler(Looper.getMainLooper())
@@ -57,10 +58,6 @@ class UsageMonitorService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val repository = (application as FocusGuardApp).repository
-        checkAppUsageUseCase = CheckAppUsageUseCase(repository)
-        getGlobalServiceStateUseCase = GetGlobalServiceStateUseCase(repository)
-        getBlockedAppsUseCase = GetBlockedAppsUseCase(repository)
 
         serviceScope.launch { getBlockedAppsUseCase().collectLatest { blockedPackages = it } }
         serviceScope.launch {

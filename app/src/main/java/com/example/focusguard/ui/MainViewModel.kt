@@ -3,7 +3,6 @@ package com.example.focusguard.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.focusguard.FocusGuardApp
 import com.example.focusguard.domain.model.AppInfo
 import com.example.focusguard.domain.usecase.GetAllowDurationUseCase
 import com.example.focusguard.domain.usecase.GetBlockedAppsUseCase
@@ -14,6 +13,8 @@ import com.example.focusguard.domain.usecase.ToggleAppBlockUseCase
 import com.example.focusguard.domain.usecase.ToggleGlobalServiceStateUseCase
 import com.example.focusguard.domain.usecase.UpdateAllowDurationUseCase
 import com.example.focusguard.domain.usecase.UpdateFrictionSentenceUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,20 +22,19 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = getApplication<FocusGuardApp>().repository
-
-    // Use Cases
-    private val getInstalledAppsUseCase = GetInstalledAppsUseCase(repository)
-    private val getBlockedAppsUseCase = GetBlockedAppsUseCase(repository)
-    private val toggleAppBlockUseCase = ToggleAppBlockUseCase(repository)
-    private val getFrictionSentenceUseCase = GetFrictionSentenceUseCase(repository)
-    private val updateFrictionSentenceUseCase = UpdateFrictionSentenceUseCase(repository)
-    private val getAllowDurationUseCase = GetAllowDurationUseCase(repository)
-    private val updateAllowDurationUseCase = UpdateAllowDurationUseCase(repository)
-    private val getGlobalServiceStateUseCase = GetGlobalServiceStateUseCase(repository)
-    private val toggleGlobalServiceStateUseCase = ToggleGlobalServiceStateUseCase(repository)
+@HiltViewModel
+class MainViewModel @Inject constructor(
+        application: Application,
+        getFrictionSentenceUseCase: GetFrictionSentenceUseCase,
+        getAllowDurationUseCase: GetAllowDurationUseCase,
+        getGlobalServiceStateUseCase: GetGlobalServiceStateUseCase,
+        getBlockedAppsUseCase: GetBlockedAppsUseCase,
+        private val getInstalledAppsUseCase: GetInstalledAppsUseCase,
+        private val toggleAppBlockUseCase: ToggleAppBlockUseCase,
+        private val updateFrictionSentenceUseCase: UpdateFrictionSentenceUseCase,
+        private val updateAllowDurationUseCase: UpdateAllowDurationUseCase,
+        private val toggleGlobalServiceStateUseCase: ToggleGlobalServiceStateUseCase
+) : AndroidViewModel(application) {
 
     private val _installedApps = MutableStateFlow<List<AppInfo>>(emptyList())
 

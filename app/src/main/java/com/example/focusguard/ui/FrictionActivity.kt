@@ -4,198 +4,181 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.focusguard.FocusGuardApp
 import com.example.focusguard.R
-import com.example.focusguard.domain.usecase.CheckAppUsageUseCase
-import com.example.focusguard.domain.usecase.GetAllowDurationUseCase
-import com.example.focusguard.domain.usecase.GetFrictionSentenceUseCase
+import androidx.activity.viewModels
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.ImeAction
 import com.example.focusguard.ui.theme.FocusGuardTheme
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.StateFlow
 
+@AndroidEntryPoint
 class FrictionActivity : ComponentActivity() {
 
-        companion object {
-                const val EXTRA_TARGET_PACKAGE = "target_package"
-        }
+    private val viewModel: FrictionViewModel by viewModels()
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-                super.onCreate(savedInstanceState)
+    companion object {
+        const val EXTRA_TARGET_PACKAGE = "target_package"
+    }
 
-                val repository = (application as FocusGuardApp).repository
-                val checkAppUsageUseCase = CheckAppUsageUseCase(repository)
-                val getFrictionSentenceUseCase = GetFrictionSentenceUseCase(repository)
-                val getAllowDurationUseCase = GetAllowDurationUseCase(repository)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-                val targetPackage = intent.getStringExtra(EXTRA_TARGET_PACKAGE)
+        val targetPackage = intent.getStringExtra(EXTRA_TARGET_PACKAGE)
 
-                setContent {
-                        FocusGuardTheme(darkTheme = true) { // Force dark theme for focus
-                                FrictionScreen(
-                                        frictionSentenceFlow = getFrictionSentenceUseCase(),
-                                        allowDurationFlow = getAllowDurationUseCase(),
-                                        onUnlock = { allowDuration ->
-                                                if (targetPackage != null) {
-                                                        checkAppUsageUseCase
-                                                                .temporarilyAllowPackage(
-                                                                        targetPackage,
-                                                                        allowDuration
-                                                                )
-                                                        val launchIntent =
-                                                                packageManager
-                                                                        .getLaunchIntentForPackage(
-                                                                                targetPackage
-                                                                        )
-                                                        if (launchIntent != null) {
-                                                                startActivity(launchIntent)
-                                                        }
-                                                }
-                                                finish()
-                                        }
-                                )
+        setContent {
+            FocusGuardTheme(darkTheme = true) { // Force dark theme for focus
+                FrictionScreen(
+                        frictionSentenceFlow = viewModel.frictionSentence,
+                        allowDurationFlow = viewModel.allowDuration,
+                        onUnlock = { allowDuration ->
+                            if (targetPackage != null) {
+                                viewModel.unlockApp(targetPackage, allowDuration)
+                                val launchIntent =
+                                        packageManager.getLaunchIntentForPackage(targetPackage)
+                                if (launchIntent != null) {
+                                    startActivity(launchIntent)
+                                }
+                            }
+                            finish()
                         }
-                }
+                )
+            }
         }
+    }
 }
 
 @Composable
 fun FrictionScreen(
-        frictionSentenceFlow: Flow<String>,
-        allowDurationFlow: Flow<Long>,
+        frictionSentenceFlow: StateFlow<String>,
+        allowDurationFlow: StateFlow<Long>,
         onUnlock: (Long) -> Unit
 ) {
-        val scope = rememberCoroutineScope()
-        var requiredSentence by remember { mutableStateOf("") }
-        var allowDuration by remember { mutableStateOf(60000L) }
-        var inputText by remember { mutableStateOf("") }
+    val requiredSentence by frictionSentenceFlow.collectAsState()
+    val allowDuration by allowDurationFlow.collectAsState()
+    var inputText by remember { mutableStateOf("") }
 
-        LaunchedEffect(Unit) {
-                launch { frictionSentenceFlow.collect { requiredSentence = it } }
-                launch { allowDurationFlow.collect { allowDuration = it } }
-        }
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
+        Column(
+            modifier = Modifier.fillMaxSize().padding(padding).padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = stringResource(id = R.string.friction_pause),
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center
+            )
 
-        Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = stringResource(id = R.string.friction_confirmation),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Card(
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor =
+                            MaterialTheme.colorScheme.surfaceVariant.copy(
+                                alpha = 0.3f
+                            )
+                    ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Column(
-                        modifier = Modifier.fillMaxSize().padding(padding).padding(32.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                    modifier = Modifier.padding(24.dp),
                 ) {
-                        Text(
-                                text = stringResource(id = R.string.friction_pause),
-                                style = MaterialTheme.typography.displayLarge,
-                                color = MaterialTheme.colorScheme.primary,
-                                textAlign = TextAlign.Center
-                        )
+                    Text(
+                        text =
+                            stringResource(
+                                id = R.string.friction_prompt
+                            ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        Text(
-                                text = stringResource(id = R.string.friction_confirmation),
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
-                                textAlign = TextAlign.Center
-                        )
-
-                        Spacer(modifier = Modifier.height(48.dp))
-
-                        Card(
-                                colors =
-                                        CardDefaults.cardColors(
-                                                containerColor =
-                                                        MaterialTheme.colorScheme.surfaceVariant
-                                                                .copy(alpha = 0.3f)
-                                        ),
-                                modifier = Modifier.fillMaxWidth()
-                        ) {
-                                Column(
-                                        modifier = Modifier.padding(24.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                        Text(
-                                                text =
-                                                        stringResource(
-                                                                id = R.string.friction_prompt
-                                                        ),
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-
-                                        Spacer(modifier = Modifier.height(16.dp))
-
-                                        Text(
-                                                text = requiredSentence,
-                                                style = MaterialTheme.typography.headlineSmall,
-                                                color = MaterialTheme.colorScheme.onSurface,
-                                                textAlign = TextAlign.Center
-                                        )
-                                }
-                        }
-
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        OutlinedTextField(
-                                value = inputText,
-                                onValueChange = { inputText = it },
-                                label = {
-                                        Text(stringResource(id = R.string.friction_input_label))
-                                },
-                                singleLine = true,
-                                modifier = Modifier.fillMaxWidth(),
-                                colors =
-                                        OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor =
-                                                        MaterialTheme.colorScheme.primary,
-                                                unfocusedBorderColor =
-                                                        MaterialTheme.colorScheme.outline,
-                                                focusedLabelColor =
-                                                        MaterialTheme.colorScheme.primary,
-                                                cursorColor = MaterialTheme.colorScheme.primary
-                                        ),
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                keyboardActions =
-                                        KeyboardActions(
-                                                onDone = {
-                                                        if (inputText == requiredSentence) {
-                                                                onUnlock(allowDuration)
-                                                        }
-                                                }
-                                        )
-                        )
-
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        Button(
-                                onClick = { onUnlock(allowDuration) },
-                                enabled = inputText == requiredSentence,
-                                modifier = Modifier.fillMaxWidth().height(56.dp),
-                                colors =
-                                        ButtonDefaults.buttonColors(
-                                                containerColor = MaterialTheme.colorScheme.primary,
-                                                disabledContainerColor =
-                                                        MaterialTheme.colorScheme.surfaceVariant,
-                                                contentColor = MaterialTheme.colorScheme.onPrimary,
-                                                disabledContentColor =
-                                                        MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                        ) {
-                                Text(
-                                        text =
-                                                stringResource(
-                                                        id = R.string.friction_proceed_button
-                                                ),
-                                        style = MaterialTheme.typography.titleMedium
-                                )
-                        }
+                    Text(
+                        text = requiredSentence,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Left
+                    )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            OutlinedTextField(
+                value = inputText,
+                onValueChange = { inputText = it },
+                label = {
+                    Text(stringResource(id = R.string.friction_input_label))
+                },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor =
+                            MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor =
+                            MaterialTheme.colorScheme.outline,
+                        focusedLabelColor =
+                            MaterialTheme.colorScheme.primary,
+                        cursorColor = MaterialTheme.colorScheme.primary
+                    ),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions =
+                    KeyboardActions(
+                        onDone = {
+                            if (inputText == requiredSentence) {
+                                onUnlock(allowDuration)
+                            }
+                        }
+                    )
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = { onUnlock(allowDuration) },
+                enabled = inputText == requiredSentence,
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        disabledContainerColor =
+                            MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        disabledContentColor =
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+            ) {
+                Text(
+                    text =
+                        stringResource(
+                            id = R.string.friction_proceed_button
+                        ),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
+    }
 }

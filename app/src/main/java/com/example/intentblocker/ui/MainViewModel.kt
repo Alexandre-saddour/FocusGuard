@@ -3,6 +3,7 @@ package com.example.intentblocker.ui
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.intentblocker.data.AppPrefs
@@ -47,18 +48,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun loadInstalledApps() {
         viewModelScope.launch {
-            val apps = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
-                .filter { 
-                    // Filter out system apps and our own app
-                    (it.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) &&
-                    it.packageName != getApplication<Application>().packageName
-                }
-                .map {
-                    AppInfo(
-                        packageName = it.packageName,
-                        label = it.applicationInfo.loadLabel(packageManager).toString(),
-                        isBlocked = false // Will be updated by combine
-                    )
+            val packages = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PackageManager.GET_META_DATA.toLong()))
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
+            }
+            val apps = packages
+                .mapNotNull { packageInfo ->
+                    packageInfo.applicationInfo?.let { appInfo ->
+                        // Filter out system apps and our own app
+                        if ((appInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) &&
+                            packageInfo.packageName != getApplication<Application>().packageName) {
+                            AppInfo(
+                                packageName = packageInfo.packageName,
+                                label = appInfo.loadLabel(packageManager).toString(),
+                                isBlocked = false // Will be updated by combine
+                            )
+                        } else {
+                            null
+                        }
+                    }
                 }
                 .sortedBy { it.label }
             

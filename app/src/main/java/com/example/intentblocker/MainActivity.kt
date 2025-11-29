@@ -2,6 +2,7 @@
 
 package com.example.intentblocker
 
+import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -18,7 +19,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -101,7 +117,10 @@ fun MainScreen(viewModel: MainViewModel) {
         ) { padding ->
                 LazyColumn(
                         modifier =
-                                Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(padding)
+                                    .padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                         item { ServiceStatusCard(hasUsageAccess, hasOverlayPermission, context) }
@@ -372,28 +391,31 @@ fun AppItem(app: AppInfo, onToggle: () -> Unit) {
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
                 Row(
-                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                 ) {
                         // Placeholder Icon
                         Box(
                                 modifier =
-                                        Modifier.size(40.dp)
-                                                .background(
-                                                        brush =
-                                                                Brush.linearGradient(
-                                                                        colors =
-                                                                                listOf(
-                                                                                        MaterialTheme
-                                                                                                .colorScheme
-                                                                                                .primary,
-                                                                                        MaterialTheme
-                                                                                                .colorScheme
-                                                                                                .secondary
-                                                                                )
-                                                                ),
-                                                        shape = CircleShape
-                                                ),
+                                        Modifier
+                                            .size(40.dp)
+                                            .background(
+                                                brush =
+                                                    Brush.linearGradient(
+                                                        colors =
+                                                            listOf(
+                                                                MaterialTheme
+                                                                    .colorScheme
+                                                                    .primary,
+                                                                MaterialTheme
+                                                                    .colorScheme
+                                                                    .secondary
+                                                            )
+                                                    ),
+                                                shape = CircleShape
+                                            ),
                                 contentAlignment = Alignment.Center
                         ) {
                                 Text(
@@ -438,14 +460,13 @@ fun AppItem(app: AppInfo, onToggle: () -> Unit) {
 }
 
 fun checkUsageStatsPermission(context: Context): Boolean {
-        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
-        val mode =
-                appOps.unsafeCheckOpNoThrow(
-                        android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
-                        android.os.Process.myUid(),
-                        context.packageName
-                )
-        return mode == android.app.AppOpsManager.MODE_ALLOWED
+    val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+    val mode = appOps.checkOpNoThrow(
+        AppOpsManager.OPSTR_GET_USAGE_STATS,
+        android.os.Process.myUid(),
+        context.packageName
+    )
+    return mode == AppOpsManager.MODE_ALLOWED
 }
 
 fun checkOverlayPermission(context: Context): Boolean {

@@ -26,6 +26,7 @@ constructor(private val context: Context, private val appPrefs: AppPrefs) : Focu
     override val frictionSentence: Flow<String> = appPrefs.frictionSentence
     override val allowDuration: Flow<Long> = appPrefs.allowDuration
     override val isServiceEnabled: Flow<Boolean> = appPrefs.isServiceEnabled
+    override val isAnalyticsEnabled: Flow<Boolean?> = appPrefs.isAnalyticsEnabled
 
     override suspend fun addBlockedPackage(packageName: String) =
             appPrefs.addBlockedPackage(packageName)
@@ -38,6 +39,8 @@ constructor(private val context: Context, private val appPrefs: AppPrefs) : Focu
 
     override suspend fun setAllowDuration(duration: Long) = appPrefs.setAllowDuration(duration)
     override suspend fun setServiceEnabled(enabled: Boolean) = appPrefs.setServiceEnabled(enabled)
+    override suspend fun setAnalyticsEnabled(enabled: Boolean) =
+            appPrefs.setAnalyticsEnabled(enabled)
 
     override suspend fun getInstalledApps(): List<AppInfo> {
         val packages =

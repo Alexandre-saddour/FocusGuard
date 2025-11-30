@@ -5,10 +5,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.flowdevproduction.focusguard.domain.model.AppInfo
 import com.flowdevproduction.focusguard.domain.usecase.GetAllowDurationUseCase
+import com.flowdevproduction.focusguard.domain.usecase.GetAnalyticsConsentUseCase
 import com.flowdevproduction.focusguard.domain.usecase.GetBlockedAppsUseCase
 import com.flowdevproduction.focusguard.domain.usecase.GetFrictionSentenceUseCase
 import com.flowdevproduction.focusguard.domain.usecase.GetGlobalServiceStateUseCase
 import com.flowdevproduction.focusguard.domain.usecase.GetInstalledAppsUseCase
+import com.flowdevproduction.focusguard.domain.usecase.SetAnalyticsConsentUseCase
 import com.flowdevproduction.focusguard.domain.usecase.ToggleAppBlockUseCase
 import com.flowdevproduction.focusguard.domain.usecase.ToggleGlobalServiceStateUseCase
 import com.flowdevproduction.focusguard.domain.usecase.UpdateAllowDurationUseCase
@@ -29,11 +31,13 @@ class MainViewModel @Inject constructor(
         getAllowDurationUseCase: GetAllowDurationUseCase,
         getGlobalServiceStateUseCase: GetGlobalServiceStateUseCase,
         getBlockedAppsUseCase: GetBlockedAppsUseCase,
+        getAnalyticsConsentUseCase: GetAnalyticsConsentUseCase,
         private val getInstalledAppsUseCase: GetInstalledAppsUseCase,
         private val toggleAppBlockUseCase: ToggleAppBlockUseCase,
         private val updateFrictionSentenceUseCase: UpdateFrictionSentenceUseCase,
         private val updateAllowDurationUseCase: UpdateAllowDurationUseCase,
-        private val toggleGlobalServiceStateUseCase: ToggleGlobalServiceStateUseCase
+        private val toggleGlobalServiceStateUseCase: ToggleGlobalServiceStateUseCase,
+        private val setAnalyticsConsentUseCase: SetAnalyticsConsentUseCase
 ) : AndroidViewModel(application) {
 
     private val _installedApps = MutableStateFlow<List<AppInfo>>(emptyList())
@@ -82,5 +86,13 @@ class MainViewModel @Inject constructor(
 
     fun toggleServiceEnabled(enabled: Boolean) {
         viewModelScope.launch { toggleGlobalServiceStateUseCase(enabled) }
+    }
+
+    val isAnalyticsEnabled =
+            getAnalyticsConsentUseCase()
+                    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    fun setAnalyticsEnabled(enabled: Boolean) {
+        viewModelScope.launch { setAnalyticsConsentUseCase(enabled) }
     }
 }

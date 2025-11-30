@@ -23,6 +23,8 @@ class AppPrefs(private val context: Context) {
                 androidx.datastore.preferences.core.longPreferencesKey("allow_duration")
         val IS_SERVICE_ENABLED =
                 androidx.datastore.preferences.core.booleanPreferencesKey("is_service_enabled")
+        val IS_ANALYTICS_ENABLED =
+                androidx.datastore.preferences.core.booleanPreferencesKey("is_analytics_enabled")
         val ALLOWED_PACKAGES = stringPreferencesKey("allowed_packages")
         const val DEFAULT_SENTENCE = "I am conscious of my choice"
         const val DEFAULT_DURATION = 60000L
@@ -70,6 +72,13 @@ class AppPrefs(private val context: Context) {
 
     suspend fun setServiceEnabled(enabled: Boolean) {
         context.dataStore.edit { preferences -> preferences[IS_SERVICE_ENABLED] = enabled }
+    }
+
+    val isAnalyticsEnabled: Flow<Boolean?> =
+            context.dataStore.data.map { preferences -> preferences[IS_ANALYTICS_ENABLED] }
+
+    suspend fun setAnalyticsEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences -> preferences[IS_ANALYTICS_ENABLED] = enabled }
     }
 
     val allowedPackages: Flow<Map<String, Long>> =

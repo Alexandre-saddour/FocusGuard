@@ -49,7 +49,10 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.flowdevproduction.focusguard.domain.model.AppInfo
 import com.flowdevproduction.focusguard.ui.MainViewModel
+import com.flowdevproduction.focusguard.ui.components.ConsentDialog
 import com.flowdevproduction.focusguard.ui.theme.FocusGuardTheme
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -59,6 +62,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { FocusGuardTheme { MainScreen(viewModel) } }
+    }
+
+    companion object {
+        const val PRIVACY_POLICY_URL = "https://firebase.google.com/support/privacy"
     }
 }
 
@@ -95,6 +102,26 @@ fun MainScreen(viewModel: MainViewModel) {
     val apps by viewModel.uiState.collectAsState()
     val frictionSentence by viewModel.frictionSentence.collectAsState()
     val allowDuration by viewModel.allowDuration.collectAsState()
+    val isAnalyticsEnabled by viewModel.isAnalyticsEnabled.collectAsState()
+
+    // Firebase Initialization Effect
+    LaunchedEffect(isAnalyticsEnabled) {
+        isAnalyticsEnabled?.let { isAnalyticsEnabled ->
+            FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = isAnalyticsEnabled
+            FirebaseAnalytics.getInstance(context).setAnalyticsCollectionEnabled(isAnalyticsEnabled)
+        }
+    }
+
+    if (isAnalyticsEnabled == null) {
+        ConsentDialog(
+            onConfirm = { viewModel.setAnalyticsEnabled(true) },
+            onDismiss = { viewModel.setAnalyticsEnabled(false) },
+            onPrivacyPolicyClick = {
+                val intent = Intent(Intent.ACTION_VIEW, MainActivity.PRIVACY_POLICY_URL.toUri())
+                context.startActivity(intent)
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -117,19 +144,14 @@ fun MainScreen(viewModel: MainViewModel) {
                 },
                 colors =
                     TopAppBarDefaults.topAppBarColors(
-                        containerColor =
-                            MaterialTheme.colorScheme.background,
-                        titleContentColor =
-                            MaterialTheme.colorScheme.primary
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = MaterialTheme.colorScheme.primary
                     ),
                 actions = {
-                    val isServiceEnabled by
-                    viewModel.isServiceEnabled.collectAsState()
+                    val isServiceEnabled by viewModel.isServiceEnabled.collectAsState()
                     Switch(
                         checked = isServiceEnabled,
-                        onCheckedChange = {
-                            viewModel.toggleServiceEnabled(it)
-                        },
+                        onCheckedChange = { viewModel.toggleServiceEnabled(it) },
                         modifier = Modifier.padding(end = 16.dp),
                         colors =
                             SwitchDefaults.colors(
@@ -148,11 +170,10 @@ fun MainScreen(viewModel: MainViewModel) {
         }
     ) { padding ->
         LazyColumn(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item { ServiceStatusCard(hasUsageAccess, hasOverlayPermission, context) }
@@ -161,8 +182,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 ConfigurationSection(
                     frictionSentence = frictionSentence,
                     allowDuration = allowDuration,
+                    isAnalyticsEnabled = isAnalyticsEnabled == true,
                     onUpdateSentence = { viewModel.updateFrictionSentence(it) },
-                    onUpdateDuration = { viewModel.updateAllowDuration(it) }
+                    onUpdateDuration = { viewModel.updateAllowDuration(it) },
+                    onToggleAnalytics = { viewModel.setAnalyticsEnabled(it) }
                 )
             }
 
@@ -199,10 +222,10 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
     Card(
         colors =
             CardDefaults.cardColors(
-                containerColor =
-                    if (isFullyEnabled)
-                        MaterialTheme.colorScheme.primaryContainer
-                    else MaterialTheme.colorScheme.errorContainer
+                containerColor = when {
+                    isFullyEnabled -> MaterialTheme.colorScheme.primaryContainer
+                    else -> MaterialTheme.colorScheme.errorContainer
+                }
             ),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -212,52 +235,40 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector =
-                        if (isFullyEnabled) Icons.Default.CheckCircle
-                        else Icons.Default.Warning,
+                    imageVector = when {
+                        isFullyEnabled -> Icons.Default.CheckCircle
+                        else -> Icons.Default.Warning
+                    },
                     contentDescription = null,
-                    tint =
-                        if (isFullyEnabled)
-                            MaterialTheme.colorScheme.onPrimaryContainer
-                        else MaterialTheme.colorScheme.onErrorContainer,
+                    tint = when {
+                        isFullyEnabled -> MaterialTheme.colorScheme.onPrimaryContainer
+                        else -> MaterialTheme.colorScheme.onErrorContainer
+                    },
                     modifier = Modifier.size(32.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text =
-                            if (isFullyEnabled)
-                                stringResource(
-                                    id = R.string.service_active
-                                )
-                            else
-                                stringResource(
-                                    id =
-                                        R.string
-                                            .permissions_required
-                                ),
+                        text = when {
+                            isFullyEnabled ->
+                                stringResource(id = R.string.service_active)
+
+                            else -> stringResource(id = R.string.permissions_required)
+                        },
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color =
-                            if (isFullyEnabled)
-                                MaterialTheme.colorScheme
-                                    .onPrimaryContainer
-                            else
-                                MaterialTheme.colorScheme
-                                    .onErrorContainer
+                        color = when {
+                            isFullyEnabled ->
+                                MaterialTheme.colorScheme.onPrimaryContainer
+
+                            else -> MaterialTheme.colorScheme.onErrorContainer
+                        }
                     )
                     if (!isFullyEnabled) {
                         Text(
-                            text =
-                                stringResource(
-                                    id =
-                                        R.string
-                                            .grant_permissions_below
-                                ),
+                            text = stringResource(id = R.string.grant_permissions_below),
                             style = MaterialTheme.typography.bodySmall,
-                            color =
-                                MaterialTheme.colorScheme
-                                    .onErrorContainer
+                            color = MaterialTheme.colorScheme.onErrorContainer
                         )
                     }
                 }
@@ -267,19 +278,14 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = {
-                        val intent =
-                            Intent(
-                                Settings.ACTION_USAGE_ACCESS_SETTINGS
-                            )
+                        val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
                         context.startActivity(intent)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors =
                         ButtonDefaults.buttonColors(
-                            containerColor =
-                                MaterialTheme.colorScheme.error,
-                            contentColor =
-                                MaterialTheme.colorScheme.onError
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
                         )
                 ) { Text(stringResource(id = R.string.grant_usage_access)) }
             }
@@ -298,10 +304,8 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
                     modifier = Modifier.fillMaxWidth(),
                     colors =
                         ButtonDefaults.buttonColors(
-                            containerColor =
-                                MaterialTheme.colorScheme.error,
-                            contentColor =
-                                MaterialTheme.colorScheme.onError
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
                         )
                 ) { Text(stringResource(id = R.string.grant_overlay_permission)) }
             }
@@ -313,8 +317,10 @@ fun ServiceStatusCard(hasUsageAccess: Boolean, hasOverlayPermission: Boolean, co
 fun ConfigurationSection(
     frictionSentence: String,
     allowDuration: Long,
+    isAnalyticsEnabled: Boolean,
     onUpdateSentence: (String) -> Unit,
-    onUpdateDuration: (Long) -> Unit
+    onUpdateDuration: (Long) -> Unit,
+    onToggleAnalytics: (Boolean) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -339,9 +345,8 @@ fun ConfigurationSection(
                 )
                 IconButton(onClick = { expanded = !expanded }) {
                     Icon(
-                        Icons.Default.Settings,
-                        contentDescription =
-                            stringResource(id = R.string.settings)
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
                     )
                 }
             }
@@ -350,22 +355,11 @@ fun ConfigurationSection(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Friction Sentence
-                var tempSentence by
-                remember(frictionSentence) {
-                    mutableStateOf(frictionSentence)
-                }
+                var tempSentence by remember(frictionSentence) { mutableStateOf(frictionSentence) }
                 OutlinedTextField(
                     value = tempSentence,
                     onValueChange = { tempSentence = it },
-                    label = {
-                        Text(
-                            stringResource(
-                                id =
-                                    R.string
-                                        .friction_sentence_label
-                            )
-                        )
-                    },
+                    label = { Text(stringResource(id = R.string.friction_sentence_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -373,13 +367,7 @@ fun ConfigurationSection(
                     TextButton(
                         onClick = { onUpdateSentence(tempSentence) },
                         modifier = Modifier.align(Alignment.End)
-                    ) {
-                        Text(
-                            stringResource(
-                                id = R.string.save_sentence_button
-                            )
-                        )
-                    }
+                    ) { Text(stringResource(id = R.string.save_sentence_button)) }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -392,34 +380,41 @@ fun ConfigurationSection(
                 OutlinedTextField(
                     value = tempDuration,
                     onValueChange = {
-                        if (it.all { char -> char.isDigit() })
-                            tempDuration = it
+                        if (it.all { char -> char.isDigit() }) tempDuration = it
                     },
-                    label = {
-                        Text(
-                            stringResource(
-                                id = R.string.unlock_duration_label
-                            )
-                        )
-                    },
+                    label = { Text(stringResource(id = R.string.unlock_duration_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 if (tempDuration.toLongOrNull()?.times(1000) != allowDuration) {
                     TextButton(
                         onClick = {
-                            tempDuration.toLongOrNull()?.let {
-                                onUpdateDuration(it * 1000)
-                            }
+                            tempDuration.toLongOrNull()?.let { onUpdateDuration(it * 1000) }
                         },
                         modifier = Modifier.align(Alignment.End)
-                    ) {
+                    ) { Text(stringResource(id = R.string.save_duration_button)) }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Analytics Toggle
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            stringResource(
-                                id = R.string.save_duration_button
-                            )
+                            text = stringResource(id = R.string.share_usage_data_title),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = stringResource(id = R.string.share_usage_data_description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
+                    Switch(checked = isAnalyticsEnabled, onCheckedChange = onToggleAnalytics)
                 }
             }
         }
@@ -488,14 +483,10 @@ fun AppItem(app: AppInfo, onToggle: () -> Unit) {
                 onCheckedChange = { onToggle() },
                 colors =
                     SwitchDefaults.colors(
-                        checkedThumbColor =
-                            MaterialTheme.colorScheme.primary,
-                        checkedTrackColor =
-                            MaterialTheme.colorScheme.primaryContainer,
-                        uncheckedThumbColor =
-                            MaterialTheme.colorScheme.outline,
-                        uncheckedTrackColor =
-                            MaterialTheme.colorScheme.surfaceVariant
+                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
                     )
             )
         }

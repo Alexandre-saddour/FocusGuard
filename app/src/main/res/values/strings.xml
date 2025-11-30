@@ -26,6 +26,8 @@
     <string name="decline">Decline</string>
     <string name="share_usage_data_title">Share Usage Data</string>
     <string name="share_usage_data_description">Help improve the app by sharing anonymous crash reports and usage data.</string>
+    <string name="search_apps_hint">Search apps…</string>
+    <string name="clear_search">Clear search</string>
     <string name="permissions_required">Permissions Required</string>
     <string name="grant_permissions_below">Grant required permissions below</string>
     <string name="grant_usage_access">Grant Usage Access</string>

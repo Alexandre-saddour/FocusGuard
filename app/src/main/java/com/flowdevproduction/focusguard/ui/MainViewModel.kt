@@ -41,10 +41,18 @@ class MainViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     private val _installedApps = MutableStateFlow<List<AppInfo>>(emptyList())
+    private val _searchQuery = MutableStateFlow("")
 
     val uiState: StateFlow<List<AppInfo>> =
-            combine(_installedApps, getBlockedAppsUseCase()) { apps, blocked ->
+            combine(_installedApps, getBlockedAppsUseCase(), _searchQuery) { apps, blocked, query ->
                         apps.map { app -> app.copy(isBlocked = blocked.contains(app.packageName)) }
+                            .filter { app ->
+                                when {
+                                    query.isBlank() -> true
+                                    else -> app.label.contains(query, ignoreCase = true) ||
+                                            app.packageName.contains(query, ignoreCase = true)
+                                }
+                            }
                     }
                     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -94,5 +102,11 @@ class MainViewModel @Inject constructor(
 
     fun setAnalyticsEnabled(enabled: Boolean) {
         viewModelScope.launch { setAnalyticsConsentUseCase(enabled) }
+    }
+
+    val searchQuery: StateFlow<String> = _searchQuery
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
     }
 }

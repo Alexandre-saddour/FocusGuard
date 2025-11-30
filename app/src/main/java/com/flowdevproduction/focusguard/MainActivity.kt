@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
@@ -186,6 +187,27 @@ fun MainScreen(viewModel: MainViewModel) {
                     onUpdateSentence = { viewModel.updateFrictionSentence(it) },
                     onUpdateDuration = { viewModel.updateAllowDuration(it) },
                     onToggleAnalytics = { viewModel.setAnalyticsEnabled(it) }
+                )
+            }
+
+            item {
+                val searchQuery by viewModel.searchQuery.collectAsState()
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { viewModel.updateSearchQuery(it) },
+                    label = { Text(stringResource(id = R.string.search_apps_hint)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { viewModel.updateSearchQuery("") }) {
+                                Icon(
+                                    Icons.Default.Close,
+                                    contentDescription = stringResource(id = R.string.clear_search)
+                                )
+                            }
+                        }
+                    }
                 )
             }
 

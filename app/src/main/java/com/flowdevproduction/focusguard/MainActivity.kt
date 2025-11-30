@@ -41,13 +41,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import com.flowdevproduction.focusguard.domain.model.AppInfo
 import com.flowdevproduction.focusguard.ui.MainViewModel
 import com.flowdevproduction.focusguard.ui.components.ConsentDialog
@@ -174,7 +178,8 @@ fun MainScreen(viewModel: MainViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .imePadding(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item { ServiceStatusCard(hasUsageAccess, hasOverlayPermission, context) }
@@ -192,12 +197,17 @@ fun MainScreen(viewModel: MainViewModel) {
 
             item {
                 val searchQuery by viewModel.searchQuery.collectAsState()
+                val keyboardController = LocalSoftwareKeyboardController.current
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { viewModel.updateSearchQuery(it) },
                     label = { Text(stringResource(id = R.string.search_apps_hint)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    ),
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = { viewModel.updateSearchQuery("") }) {

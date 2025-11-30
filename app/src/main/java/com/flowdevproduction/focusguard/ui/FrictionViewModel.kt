@@ -1,10 +1,10 @@
-package com.example.focusguard.ui
+package com.flowdevproduction.focusguard.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.focusguard.domain.usecase.CheckAppUsageUseCase
-import com.example.focusguard.domain.usecase.GetAllowDurationUseCase
-import com.example.focusguard.domain.usecase.GetFrictionSentenceUseCase
+import com.flowdevproduction.focusguard.domain.usecase.CheckAppUsageUseCase
+import com.flowdevproduction.focusguard.domain.usecase.GetAllowDurationUseCase
+import com.flowdevproduction.focusguard.domain.usecase.GetFrictionSentenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted

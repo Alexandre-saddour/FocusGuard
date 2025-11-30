@@ -5,4 +5,6 @@ plugins {
     alias(libs.plugins.kotlinCompose) apply false
     alias(libs.plugins.hiltAndroid) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.googleServices) apply false
+    alias(libs.plugins.firebaseCrashlytics) apply false
 }

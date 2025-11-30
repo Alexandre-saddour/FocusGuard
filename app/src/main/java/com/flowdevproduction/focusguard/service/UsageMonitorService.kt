@@ -1,4 +1,4 @@
-package com.example.focusguard.service
+package com.flowdevproduction.focusguard.service
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,11 +12,11 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
-import com.example.focusguard.R
-import com.example.focusguard.domain.usecase.CheckAppUsageUseCase
-import com.example.focusguard.domain.usecase.GetBlockedAppsUseCase
-import com.example.focusguard.domain.usecase.GetGlobalServiceStateUseCase
-import com.example.focusguard.ui.FrictionActivity
+import com.flowdevproduction.focusguard.R
+import com.flowdevproduction.focusguard.domain.usecase.CheckAppUsageUseCase
+import com.flowdevproduction.focusguard.domain.usecase.GetBlockedAppsUseCase
+import com.flowdevproduction.focusguard.domain.usecase.GetGlobalServiceStateUseCase
+import com.flowdevproduction.focusguard.ui.FrictionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope

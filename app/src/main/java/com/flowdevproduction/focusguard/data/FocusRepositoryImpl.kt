@@ -1,12 +1,12 @@
-package com.example.focusguard.data
+package com.flowdevproduction.focusguard.data
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.SystemClock
-import com.example.focusguard.domain.FocusRepository
-import com.example.focusguard.domain.model.AppInfo
+import com.flowdevproduction.focusguard.domain.FocusRepository
+import com.flowdevproduction.focusguard.domain.model.AppInfo
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

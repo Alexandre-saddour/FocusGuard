@@ -1,7 +1,7 @@
-package com.example.focusguard.domain.usecase
+package com.flowdevproduction.focusguard.domain.usecase
 
-import com.example.focusguard.domain.FocusRepository
-import com.example.focusguard.domain.model.AppInfo
+import com.flowdevproduction.focusguard.domain.FocusRepository
+import com.flowdevproduction.focusguard.domain.model.AppInfo
 import javax.inject.Inject
 
 class GetInstalledAppsUseCase @Inject constructor(private val repository: FocusRepository) {

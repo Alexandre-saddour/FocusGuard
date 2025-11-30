@@ -1,6 +1,6 @@
-package com.example.focusguard.domain
+package com.flowdevproduction.focusguard.domain
 
-import com.example.focusguard.domain.model.AppInfo
+import com.flowdevproduction.focusguard.domain.model.AppInfo
 import kotlinx.coroutines.flow.Flow
 
 interface FocusRepository {

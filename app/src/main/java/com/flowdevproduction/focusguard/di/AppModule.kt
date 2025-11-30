@@ -1,9 +1,9 @@
-package com.example.focusguard.di
+package com.flowdevproduction.focusguard.di
 
 import android.content.Context
-import com.example.focusguard.data.AppPrefs
-import com.example.focusguard.data.FocusRepositoryImpl
-import com.example.focusguard.domain.FocusRepository
+import com.flowdevproduction.focusguard.data.AppPrefs
+import com.flowdevproduction.focusguard.data.FocusRepositoryImpl
+import com.flowdevproduction.focusguard.domain.FocusRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

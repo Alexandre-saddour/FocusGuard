@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.focusguard
+package com.flowdevproduction.focusguard
 
 import android.app.AppOpsManager
 import android.content.Context
@@ -47,9 +47,9 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.example.focusguard.domain.model.AppInfo
-import com.example.focusguard.ui.MainViewModel
-import com.example.focusguard.ui.theme.FocusGuardTheme
+import com.flowdevproduction.focusguard.domain.model.AppInfo
+import com.flowdevproduction.focusguard.ui.MainViewModel
+import com.flowdevproduction.focusguard.ui.theme.FocusGuardTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,7 +80,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     val serviceIntent =
                         Intent(
                             context,
-                            com.example.focusguard.service
+                            com.flowdevproduction.focusguard.service
                                 .UsageMonitorService::class
                                 .java
                         )

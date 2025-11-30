@@ -1,4 +1,4 @@
-package com.example.focusguard.ui.theme
+package com.flowdevproduction.focusguard.ui.theme
 
 import android.app.Activity
 import android.os.Build

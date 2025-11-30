@@ -1,4 +1,4 @@
-package com.example.focusguard.ui
+package com.flowdevproduction.focusguard.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.focusguard.R
+import com.flowdevproduction.focusguard.R
 import androidx.activity.viewModels
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.ImeAction
-import com.example.focusguard.ui.theme.FocusGuardTheme
+import com.flowdevproduction.focusguard.ui.theme.FocusGuardTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
 

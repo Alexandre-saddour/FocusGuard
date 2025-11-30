@@ -1,4 +1,4 @@
-package com.example.focusguard.ui.theme
+package com.flowdevproduction.focusguard.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -90,7 +90,7 @@ class MainViewModel @Inject constructor(
 
     val isAnalyticsEnabled =
             getAnalyticsConsentUseCase()
-                    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+                    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     fun setAnalyticsEnabled(enabled: Boolean) {
         viewModelScope.launch { setAnalyticsConsentUseCase(enabled) }

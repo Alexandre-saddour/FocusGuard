@@ -59,7 +59,11 @@ class UsageMonitorService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        serviceScope.launch { getBlockedAppsUseCase().collectLatest { blockedPackages = it } }
+        serviceScope.launch {
+            getBlockedAppsUseCase().collectLatest {
+                blockedPackages = it
+            }
+        }
         serviceScope.launch {
             getGlobalServiceStateUseCase().collectLatest { isServiceEnabled = it }
         }

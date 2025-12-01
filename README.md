@@ -21,9 +21,9 @@ FocusGuard uses an **Android AccessibilityService** to monitor the foreground ap
 
 ---
 
-## ⚙️ Important Note on Permissions
+## ⚙️ Note
 
-Because the core functionality relies on monitoring app launches, after installation you must manually enable the FocusGuard Accessibility Service in your device’s settings:
+Vibe coded in a 24H challenge
 
 ## 📜 License
 
